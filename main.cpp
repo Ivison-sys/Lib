@@ -9,7 +9,6 @@ private:
     Tree* pai = nullptr;
     Tree* menor = nullptr;
     Tree* maior = nullptr;
-    int value;
 
     Tree* createNo(int value){
         Tree* no = new Tree();
@@ -19,8 +18,8 @@ private:
 
     Tree* seachTree(Tree* no, int value){
         while(no != nullptr && value != no->value){
-            if(value < no->value){ no = no->maior;}
-            else { no = no->menor; }
+            if(value < no->value){ no = no->menor;}
+            else { no = no->maior; }
         }
         return no;
     }
@@ -32,18 +31,11 @@ private:
         return no;
     }
 
-    Tree* sucessor(Tree* no){
-        if(no->maior != nullptr){ return this->minino(no->maior); }
-        Tree* aux = no->pai;
-
-        while(aux != nullptr && no == aux->menor){
-            no = pai;
-            pai = pai->pai;
-        }
-        return pai;
-    }
+    
 
 public:
+    int value;
+
     void insertNo(int value){
         Tree* no = createNo(value);
         if(this->raiz == nullptr){
@@ -88,6 +80,19 @@ public:
         show(node->menor, nivel + 1);
     }
 
+    Tree* sucessor(int value){
+        Tree* no = seachTree(this->raiz, value);
+        if(no == nullptr){ printf("Err0");}
+        if(no->maior != nullptr){ return minino(no->maior); }
+        Tree* aux = no->pai;
+
+        while(aux != nullptr && no == aux->maior){
+            no = aux;
+            aux = aux->pai;
+        }
+        return aux;
+    }
+
     Tree* getRoot() { return raiz; }
 
 
@@ -105,11 +110,26 @@ int main(){
         cout << "Digite comando: "; cin >> cmd;
 
         switch (cmd){
-        case 1:
-            
-            break;
-        default:
-            break;
+            case 1:
+                do{
+                    cout << "Valor: "; cin >> value;
+                    if(value != -1){
+                        arvore.insertNo(value);
+                    }
+                } while(value != -1);
+                break;
+            case 2:
+                cout << "Caminahndo em ordem!" nl;
+                arvore.emOrdem(arvore.getRoot());
+                cout nl;
+                break;
+            case 3:
+                cout << "Verificar sucessor" nl;
+                cout << "Digite o valor: "; cin >> value;
+                cout << "Sucessor de é " << value << ": " << arvore.sucessor(value)->value nl;
+                break;
+            default:
+                break;
         }
         
     } while(cmd != -1);
